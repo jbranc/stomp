@@ -248,4 +248,50 @@ export function registerBetaTools(server: McpServer) {
       };
     }
   );
+
+  server.tool(
+    "delete_beta_group",
+    "Delete a beta group.",
+    {
+      beta_group_id: z.string().describe("The beta group ID to delete"),
+    },
+    async ({ beta_group_id }) => {
+      await apiRequest("DELETE", `/v1/betaGroups/${beta_group_id}`);
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              success: true,
+              message: `Deleted beta group ${beta_group_id}`,
+            }),
+          },
+        ],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_beta_tester",
+    "Remove a beta tester from all groups and apps.",
+    {
+      tester_id: z.string().describe("The beta tester ID to delete"),
+    },
+    async ({ tester_id }) => {
+      await apiRequest("DELETE", `/v1/betaTesters/${tester_id}`);
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              success: true,
+              message: `Deleted beta tester ${tester_id}`,
+            }),
+          },
+        ],
+      };
+    }
+  );
 }
