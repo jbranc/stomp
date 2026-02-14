@@ -19,6 +19,22 @@ import { registerSubmissionTools } from "../src/tools/submissions.js";
 import { registerGenericTools } from "../src/tools/generic.js";
 import { registerUserTools } from "../src/tools/users.js";
 import { registerCapabilityTools } from "../src/tools/capabilities.js";
+import { registerReviewTools } from "../src/tools/reviews.js";
+import { registerScreenshotTools } from "../src/tools/screenshots.js";
+import { registerAnalyticsTools } from "../src/tools/analytics.js";
+import { registerPricingTools } from "../src/tools/pricing.js";
+import { registerBetaDetailTools } from "../src/tools/beta-detail.js";
+import { registerCertificateTools } from "../src/tools/certificates.js";
+import { registerAppInfoTools } from "../src/tools/app-info.js";
+import { registerPhasedReleaseTools } from "../src/tools/phased-releases.js";
+import { registerInAppPurchaseTools } from "../src/tools/in-app-purchases.js";
+import { registerSubscriptionTools } from "../src/tools/subscriptions.js";
+import { registerGameCenterTools } from "../src/tools/game-center.js";
+import { registerXcodeCloudTools } from "../src/tools/xcode-cloud.js";
+import { registerAppClipTools } from "../src/tools/app-clips.js";
+import { registerSandboxTools } from "../src/tools/sandbox.js";
+import { registerComplianceTools } from "../src/tools/compliance.js";
+import { registerAppEventTools } from "../src/tools/app-events.js";
 
 const mockedApiRequest = vi.mocked(apiRequest);
 const mockedApiRequestAllPages = vi.mocked(apiRequestAllPages);
@@ -39,6 +55,22 @@ function createServerWithAllTools(): McpServer {
   registerGenericTools(server);
   registerUserTools(server);
   registerCapabilityTools(server);
+  registerReviewTools(server);
+  registerScreenshotTools(server);
+  registerAnalyticsTools(server);
+  registerPricingTools(server);
+  registerBetaDetailTools(server);
+  registerCertificateTools(server);
+  registerAppInfoTools(server);
+  registerPhasedReleaseTools(server);
+  registerInAppPurchaseTools(server);
+  registerSubscriptionTools(server);
+  registerGameCenterTools(server);
+  registerXcodeCloudTools(server);
+  registerAppClipTools(server);
+  registerSandboxTools(server);
+  registerComplianceTools(server);
+  registerAppEventTools(server);
 
   return server;
 }
@@ -56,67 +88,105 @@ function getRegisteredTools(
 }
 
 describe("tool registration", () => {
-  it("registers exactly 29 tools", () => {
+  it("registers exactly 162 tools", () => {
     const server = createServerWithAllTools();
     const tools = getRegisteredTools(server);
     const toolNames = Object.keys(tools);
 
-    expect(toolNames).toHaveLength(29);
+    expect(toolNames).toHaveLength(162);
   });
 
-  it("contains all expected tool names", () => {
+  it("contains all expected tool names across all categories", () => {
     const server = createServerWithAllTools();
     const tools = getRegisteredTools(server);
     const toolNames = Object.keys(tools);
 
-    // Apps
-    expect(toolNames).toContain("list_apps");
-    expect(toolNames).toContain("get_app");
-    expect(toolNames).toContain("create_app");
+    const expectedTools = [
+      // Apps
+      "list_apps", "get_app", "create_app",
+      // Versions
+      "list_app_store_versions", "create_app_store_version", "update_app_store_version",
+      // Localizations
+      "list_version_localizations", "get_version_localization", "create_version_localization", "update_version_localization",
+      // Beta / TestFlight
+      "list_beta_groups", "create_beta_group", "delete_beta_group",
+      "list_beta_testers", "create_beta_tester", "delete_beta_tester",
+      "add_tester_to_beta_group", "remove_tester_from_beta_group",
+      // Builds
+      "list_builds", "add_build_to_beta_group",
+      // Bundle IDs
+      "list_bundle_ids", "register_bundle_id",
+      // Submissions
+      "create_app_store_version_submission",
+      // Users & Devices
+      "list_users", "list_devices",
+      // Capabilities
+      "list_bundle_id_capabilities", "enable_bundle_id_capability", "disable_bundle_id_capability",
+      // Generic
+      "api_request",
+      // Reviews
+      "list_customer_reviews", "get_customer_review", "create_review_response", "update_review_response", "delete_review_response",
+      // Screenshots & Previews
+      "list_screenshot_sets", "create_screenshot_set", "delete_screenshot_set",
+      "list_screenshots", "create_screenshot", "delete_screenshot",
+      "list_preview_sets", "create_preview_set", "delete_preview_set",
+      "list_previews", "create_preview", "delete_preview",
+      // Analytics
+      "create_analytics_report_request", "list_analytics_report_requests", "get_analytics_report_request",
+      "list_analytics_reports", "list_analytics_report_instances", "list_analytics_report_segments",
+      // Pricing
+      "list_app_price_points", "get_app_price_schedule", "list_territories",
+      // Beta Detail
+      "list_beta_app_localizations", "create_beta_app_localization", "update_beta_app_localization",
+      "list_beta_build_localizations", "create_beta_build_localization", "update_beta_build_localization",
+      "submit_build_for_beta_review", "get_beta_app_review_detail", "update_beta_app_review_detail",
+      // Certificates & Profiles
+      "list_certificates", "get_certificate", "create_certificate", "revoke_certificate",
+      "list_profiles", "get_profile", "create_profile", "delete_profile",
+      // App Info
+      "list_app_infos", "get_app_info", "update_app_info",
+      "list_app_info_localizations", "update_app_info_localization",
+      "list_app_categories", "list_age_rating_declarations", "update_age_rating_declaration",
+      // Phased Releases
+      "get_phased_release", "create_phased_release", "update_phased_release", "delete_phased_release",
+      "create_version_release_request",
+      // In-App Purchases
+      "list_in_app_purchases", "get_in_app_purchase", "create_in_app_purchase", "update_in_app_purchase", "delete_in_app_purchase",
+      "list_iap_localizations", "create_iap_localization", "update_iap_localization", "delete_iap_localization",
+      "list_iap_price_points", "submit_iap_for_review",
+      // Subscriptions
+      "list_subscription_groups", "create_subscription_group", "get_subscription_group",
+      "list_subscriptions", "create_subscription", "update_subscription", "delete_subscription",
+      "list_subscription_localizations", "create_subscription_localization", "update_subscription_localization", "delete_subscription_localization",
+      "list_subscription_prices", "list_subscription_price_points",
+      "create_subscription_introductory_offer", "submit_subscription_group",
+      // Game Center
+      "get_game_center_detail",
+      "list_game_center_leaderboards", "create_game_center_leaderboard", "update_game_center_leaderboard", "delete_game_center_leaderboard",
+      "list_game_center_achievements", "create_game_center_achievement", "update_game_center_achievement", "delete_game_center_achievement",
+      "list_game_center_leaderboard_sets", "create_game_center_leaderboard_set", "delete_game_center_leaderboard_set",
+      "list_game_center_groups", "create_game_center_group",
+      // Xcode Cloud
+      "list_ci_products", "get_ci_product", "list_ci_workflows", "get_ci_workflow",
+      "list_ci_build_runs", "get_ci_build_run", "start_ci_build_run",
+      "list_ci_build_actions", "list_ci_artifacts", "list_ci_test_results", "list_ci_issues",
+      "list_ci_mac_os_versions", "list_ci_xcode_versions",
+      // App Clips
+      "list_app_clips", "get_app_clip",
+      "list_app_clip_default_experiences", "create_app_clip_default_experience", "update_app_clip_default_experience", "delete_app_clip_default_experience",
+      // Sandbox
+      "list_sandbox_testers", "update_sandbox_tester", "clear_sandbox_tester_purchase_history",
+      // Compliance
+      "list_app_encryption_declarations", "create_app_encryption_declaration", "get_app_encryption_declaration",
+      "list_eulas", "create_eula", "update_eula", "delete_eula",
+      // App Events
+      "list_app_events", "create_app_event", "update_app_event", "delete_app_event",
+      "list_app_event_localizations", "create_app_event_localization", "update_app_event_localization", "delete_app_event_localization",
+    ];
 
-    // Versions
-    expect(toolNames).toContain("list_app_store_versions");
-    expect(toolNames).toContain("create_app_store_version");
-    expect(toolNames).toContain("update_app_store_version");
-
-    // Localizations
-    expect(toolNames).toContain("list_version_localizations");
-    expect(toolNames).toContain("get_version_localization");
-    expect(toolNames).toContain("create_version_localization");
-    expect(toolNames).toContain("update_version_localization");
-
-    // Beta / TestFlight
-    expect(toolNames).toContain("list_beta_groups");
-    expect(toolNames).toContain("create_beta_group");
-    expect(toolNames).toContain("list_beta_testers");
-    expect(toolNames).toContain("create_beta_tester");
-    expect(toolNames).toContain("add_tester_to_beta_group");
-    expect(toolNames).toContain("remove_tester_from_beta_group");
-    expect(toolNames).toContain("delete_beta_group");
-    expect(toolNames).toContain("delete_beta_tester");
-
-    // Builds
-    expect(toolNames).toContain("list_builds");
-    expect(toolNames).toContain("add_build_to_beta_group");
-
-    // Bundle IDs
-    expect(toolNames).toContain("list_bundle_ids");
-    expect(toolNames).toContain("register_bundle_id");
-
-    // Submissions
-    expect(toolNames).toContain("create_app_store_version_submission");
-
-    // Users
-    expect(toolNames).toContain("list_users");
-    expect(toolNames).toContain("list_devices");
-
-    // Capabilities
-    expect(toolNames).toContain("list_bundle_id_capabilities");
-    expect(toolNames).toContain("enable_bundle_id_capability");
-    expect(toolNames).toContain("disable_bundle_id_capability");
-
-    // Generic
-    expect(toolNames).toContain("api_request");
+    for (const name of expectedTools) {
+      expect(toolNames, `Missing tool: ${name}`).toContain(name);
+    }
   });
 });
 

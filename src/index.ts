@@ -12,11 +12,27 @@ import { registerSubmissionTools } from "./tools/submissions.js";
 import { registerGenericTools } from "./tools/generic.js";
 import { registerUserTools } from "./tools/users.js";
 import { registerCapabilityTools } from "./tools/capabilities.js";
+import { registerReviewTools } from "./tools/reviews.js";
+import { registerScreenshotTools } from "./tools/screenshots.js";
+import { registerAnalyticsTools } from "./tools/analytics.js";
+import { registerPricingTools } from "./tools/pricing.js";
+import { registerBetaDetailTools } from "./tools/beta-detail.js";
+import { registerCertificateTools } from "./tools/certificates.js";
+import { registerAppInfoTools } from "./tools/app-info.js";
+import { registerPhasedReleaseTools } from "./tools/phased-releases.js";
+import { registerInAppPurchaseTools } from "./tools/in-app-purchases.js";
+import { registerSubscriptionTools } from "./tools/subscriptions.js";
+import { registerGameCenterTools } from "./tools/game-center.js";
+import { registerXcodeCloudTools } from "./tools/xcode-cloud.js";
+import { registerAppClipTools } from "./tools/app-clips.js";
+import { registerSandboxTools } from "./tools/sandbox.js";
+import { registerComplianceTools } from "./tools/compliance.js";
+import { registerAppEventTools } from "./tools/app-events.js";
 import { getAuthConfig } from "./auth.js";
 
 const server = new McpServer({
   name: "app-store-connect",
-  version: "0.1.0",
+  version: "0.2.0",
 });
 
 // Register all tool groups
@@ -30,6 +46,22 @@ registerSubmissionTools(server);
 registerGenericTools(server);
 registerUserTools(server);
 registerCapabilityTools(server);
+registerReviewTools(server);
+registerScreenshotTools(server);
+registerAnalyticsTools(server);
+registerPricingTools(server);
+registerBetaDetailTools(server);
+registerCertificateTools(server);
+registerAppInfoTools(server);
+registerPhasedReleaseTools(server);
+registerInAppPurchaseTools(server);
+registerSubscriptionTools(server);
+registerGameCenterTools(server);
+registerXcodeCloudTools(server);
+registerAppClipTools(server);
+registerSandboxTools(server);
+registerComplianceTools(server);
+registerAppEventTools(server);
 
 async function main() {
   // Validate auth config early so we fail fast with a clear error
