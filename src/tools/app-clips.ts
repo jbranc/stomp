@@ -8,7 +8,7 @@ export function registerAppClipTools(server: McpServer) {
     "List App Clips for an app.",
     {
       app_id: z.string().describe("The App Store Connect app ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, limit }) => {
       const params: Record<string, string> = {
@@ -58,7 +58,7 @@ export function registerAppClipTools(server: McpServer) {
     "List default experiences for an App Clip.",
     {
       clip_id: z.string().describe("The App Clip ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ clip_id, limit }) => {
       const params: Record<string, string> = {

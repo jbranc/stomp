@@ -22,7 +22,7 @@ export function registerInAppPurchaseTools(server: McpServer) {
         .describe(
           "Comma-separated related resources to include (e.g., inAppPurchaseLocalizations,pricePoints,content)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({
       app_id,
@@ -190,7 +190,7 @@ export function registerInAppPurchaseTools(server: McpServer) {
     "List localizations for an in-app purchase.",
     {
       iap_id: z.string().describe("The in-app purchase ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ iap_id, limit }) => {
       const params: Record<string, string> = {};
@@ -322,7 +322,7 @@ export function registerInAppPurchaseTools(server: McpServer) {
         .string()
         .optional()
         .describe("Filter by territory code (e.g., USA, GBR)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ iap_id, filter_territory, limit }) => {
       const params: Record<string, string> = {};

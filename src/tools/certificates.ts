@@ -15,7 +15,7 @@ export function registerCertificateTools(server: McpServer) {
         ),
       filter_displayName: z.string().optional().describe("Filter by display name"),
       filter_serialNumber: z.string().optional().describe("Filter by serial number"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_certificateType, filter_displayName, filter_serialNumber, limit }) => {
       const params: Record<string, string> = {};
@@ -125,7 +125,7 @@ export function registerCertificateTools(server: McpServer) {
         .string()
         .optional()
         .describe("Filter by profile state (e.g., ACTIVE, INVALID)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_name, filter_profileType, filter_profileState, limit }) => {
       const params: Record<string, string> = {};

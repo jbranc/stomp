@@ -8,7 +8,7 @@ export function registerLocalizationTools(server: McpServer) {
     "List all localizations for an App Store version. Returns description, keywords, whatsNew, promotional text, etc. for each locale.",
     {
       version_id: z.string().describe("The App Store version ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ version_id, limit }) => {
       const params: Record<string, string> = {};

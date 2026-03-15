@@ -51,7 +51,7 @@ export function registerAnalyticsTools(server: McpServer) {
         .enum(["ONE_TIME_SNAPSHOT", "ONGOING"])
         .optional()
         .describe("Filter by access type"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, filter_accessType, limit }) => {
       const params: Record<string, string> = {};
@@ -113,7 +113,7 @@ export function registerAnalyticsTools(server: McpServer) {
         .describe(
           "Filter by report category (e.g., APP_USAGE, APP_STORE_ENGAGEMENT, COMMERCE, FRAMEWORK_USAGE, PERFORMANCE)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ request_id, filter_category, limit }) => {
       const params: Record<string, string> = {};
@@ -146,7 +146,7 @@ export function registerAnalyticsTools(server: McpServer) {
         .string()
         .optional()
         .describe("Filter by granularity (e.g., DAILY, WEEKLY, MONTHLY)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ report_id, filter_processingDate, filter_granularity, limit }) => {
       const params: Record<string, string> = {};
@@ -174,7 +174,7 @@ export function registerAnalyticsTools(server: McpServer) {
     "List segments for an analytics report instance.",
     {
       instance_id: z.string().describe("The analytics report instance ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ instance_id, limit }) => {
       const params: Record<string, string> = {};

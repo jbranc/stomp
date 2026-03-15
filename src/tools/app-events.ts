@@ -8,7 +8,7 @@ export function registerAppEventTools(server: McpServer) {
     "List in-app events for an app.",
     {
       app_id: z.string().describe("The App Store Connect app ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, limit }) => {
       const params: Record<string, string> = {};
@@ -236,7 +236,7 @@ export function registerAppEventTools(server: McpServer) {
     "List localizations for an in-app event.",
     {
       event_id: z.string().describe("The app event ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ event_id, limit }) => {
       const params: Record<string, string> = {};

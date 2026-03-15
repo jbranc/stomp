@@ -14,7 +14,7 @@ export function registerAppInfoTools(server: McpServer) {
         .describe(
           "Comma-separated includes (e.g., appInfoLocalizations,primaryCategory,secondaryCategory)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, include, limit }) => {
       const params: Record<string, string> = {};
@@ -170,7 +170,7 @@ export function registerAppInfoTools(server: McpServer) {
     "List all localizations for an app info (name, subtitle, privacy policy per locale).",
     {
       app_info_id: z.string().describe("The app info ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_info_id, limit }) => {
       const params: Record<string, string> = {};
@@ -240,7 +240,7 @@ export function registerAppInfoTools(server: McpServer) {
         .string()
         .optional()
         .describe("Comma-separated includes (e.g., subcategories)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_platforms, include, limit }) => {
       const params: Record<string, string> = {};
@@ -340,15 +340,15 @@ export function registerAppInfoTools(server: McpServer) {
         .enum(["FIVE_AND_UNDER", "SIX_TO_EIGHT", "NINE_TO_ELEVEN"])
         .optional()
         .describe("Kids age band (for Made for Kids apps)"),
-      gambling: z.boolean().optional().describe("Real gambling"),
-      lootBox: z.boolean().optional().describe("Loot boxes / randomized purchases"),
-      unrestrictedWebAccess: z.boolean().optional().describe("Unrestricted web access"),
-      parentalControls: z.boolean().optional().describe("Parental controls"),
-      messagingAndChat: z.boolean().optional().describe("Messaging and chat"),
-      advertising: z.boolean().optional().describe("Advertising"),
-      userGeneratedContent: z.boolean().optional().describe("User generated content"),
-      healthOrWellnessTopics: z.boolean().optional().describe("Health or wellness topics"),
-      ageAssurance: z.boolean().optional().describe("Age assurance / verification"),
+      gambling: z.coerce.boolean().optional().describe("Real gambling"),
+      lootBox: z.coerce.boolean().optional().describe("Loot boxes / randomized purchases"),
+      unrestrictedWebAccess: z.coerce.boolean().optional().describe("Unrestricted web access"),
+      parentalControls: z.coerce.boolean().optional().describe("Parental controls"),
+      messagingAndChat: z.coerce.boolean().optional().describe("Messaging and chat"),
+      advertising: z.coerce.boolean().optional().describe("Advertising"),
+      userGeneratedContent: z.coerce.boolean().optional().describe("User generated content"),
+      healthOrWellnessTopics: z.coerce.boolean().optional().describe("Health or wellness topics"),
+      ageAssurance: z.coerce.boolean().optional().describe("Age assurance / verification"),
     },
     async ({
       id,

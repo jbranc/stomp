@@ -12,7 +12,7 @@ export function registerScreenshotTools(server: McpServer) {
       localization_id: z
         .string()
         .describe("The App Store version localization ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ localization_id, limit }) => {
       const params: Record<string, string> = {};
@@ -104,7 +104,7 @@ export function registerScreenshotTools(server: McpServer) {
     "List screenshots within a screenshot set.",
     {
       set_id: z.string().describe("The app screenshot set ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ set_id, limit }) => {
       const params: Record<string, string> = {};
@@ -129,7 +129,7 @@ export function registerScreenshotTools(server: McpServer) {
     {
       set_id: z.string().describe("The app screenshot set ID"),
       fileName: z.string().describe("The file name of the screenshot"),
-      fileSize: z.number().describe("The file size in bytes"),
+      fileSize: z.coerce.number().describe("The file size in bytes"),
     },
     async ({ set_id, fileName, fileSize }) => {
       const body = {
@@ -194,7 +194,7 @@ export function registerScreenshotTools(server: McpServer) {
       localization_id: z
         .string()
         .describe("The App Store version localization ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ localization_id, limit }) => {
       const params: Record<string, string> = {};
@@ -286,7 +286,7 @@ export function registerScreenshotTools(server: McpServer) {
     "List app previews within a preview set.",
     {
       set_id: z.string().describe("The app preview set ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ set_id, limit }) => {
       const params: Record<string, string> = {};
@@ -311,7 +311,7 @@ export function registerScreenshotTools(server: McpServer) {
     {
       set_id: z.string().describe("The app preview set ID"),
       fileName: z.string().describe("The file name of the preview video"),
-      fileSize: z.number().describe("The file size in bytes"),
+      fileSize: z.coerce.number().describe("The file size in bytes"),
       previewFrameTimeCode: z
         .string()
         .optional()

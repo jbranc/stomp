@@ -32,7 +32,7 @@ export function registerBuildTools(server: McpServer) {
         .describe(
           "Sort field (e.g., -uploadedDate for newest first, uploadedDate for oldest first)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({
       app_id,

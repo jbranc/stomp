@@ -8,7 +8,7 @@ export function registerBetaDetailTools(server: McpServer) {
     "List TestFlight app-level localizations (descriptions per locale) for an app.",
     {
       app_id: z.string().describe("The App Store Connect app ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, limit }) => {
       const params: Record<string, string> = {};
@@ -114,7 +114,7 @@ export function registerBetaDetailTools(server: McpServer) {
     "List TestFlight build-level localizations ('What to Test' per locale) for a build.",
     {
       build_id: z.string().describe("The build ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ build_id, limit }) => {
       const params: Record<string, string> = {};
@@ -261,7 +261,7 @@ export function registerBetaDetailTools(server: McpServer) {
       contactEmail: z.string().optional().describe("Contact email address"),
       demoAccountName: z.string().optional().describe("Demo account username"),
       demoAccountPassword: z.string().optional().describe("Demo account password"),
-      demoAccountRequired: z.boolean().optional().describe("Whether a demo account is required"),
+      demoAccountRequired: z.coerce.boolean().optional().describe("Whether a demo account is required"),
       notes: z.string().optional().describe("Additional notes for the reviewer"),
     },
     async ({

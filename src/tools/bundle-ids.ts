@@ -22,7 +22,7 @@ export function registerBundleIdTools(server: McpServer) {
         .describe(
           "Comma-separated includes (e.g., bundleIdCapabilities,profiles,app)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({
       filter_identifier,

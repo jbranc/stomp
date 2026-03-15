@@ -8,7 +8,7 @@ export function registerComplianceTools(server: McpServer) {
     "List app encryption declarations for an app.",
     {
       app_id: z.string().describe("The App Store Connect app ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, limit }) => {
       const params: Record<string, string> = {};
@@ -46,8 +46,8 @@ export function registerComplianceTools(server: McpServer) {
         .boolean()
         .describe("Whether the app contains third-party cryptography"),
       platform: z.string().describe("The platform (e.g., IOS, MAC_OS)"),
-      usesEncryption: z.boolean().describe("Whether the app uses encryption"),
-      isExempt: z.boolean().describe("Whether the app is exempt from encryption regulations"),
+      usesEncryption: z.coerce.boolean().describe("Whether the app uses encryption"),
+      isExempt: z.coerce.boolean().describe("Whether the app is exempt from encryption regulations"),
     },
     async ({
       app_id,

@@ -13,7 +13,7 @@ export function registerBetaTools(server: McpServer) {
         .string()
         .optional()
         .describe("Comma-separated includes (e.g., betaTesters,builds,app)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, filter_name, include, limit }) => {
       const params: Record<string, string> = {
@@ -109,7 +109,7 @@ export function registerBetaTools(server: McpServer) {
         .string()
         .optional()
         .describe("Comma-separated includes (e.g., betaGroups,apps,builds)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_email, filter_betaGroups, filter_apps, include, limit }) => {
       const params: Record<string, string> = {};

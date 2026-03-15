@@ -28,7 +28,7 @@ export function registerVersionTools(server: McpServer) {
         .describe(
           "Comma-separated includes (e.g., appStoreVersionLocalizations,build,appStoreVersionSubmission)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({
       app_id,

@@ -33,7 +33,7 @@ export function registerGameCenterTools(server: McpServer) {
     "List Game Center leaderboards for a Game Center detail.",
     {
       detail_id: z.string().describe("The Game Center detail ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ detail_id, limit }) => {
       const params: Record<string, string> = {};
@@ -236,7 +236,7 @@ export function registerGameCenterTools(server: McpServer) {
     "List Game Center achievements for a Game Center detail.",
     {
       detail_id: z.string().describe("The Game Center detail ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ detail_id, limit }) => {
       const params: Record<string, string> = {};
@@ -264,11 +264,11 @@ export function registerGameCenterTools(server: McpServer) {
         .describe("The Game Center detail ID to associate this achievement with"),
       referenceName: z.string().describe("A reference name for the achievement"),
       vendorIdentifier: z.string().describe("A unique vendor identifier for the achievement"),
-      points: z.number().describe("Point value of the achievement"),
+      points: z.coerce.number().describe("Point value of the achievement"),
       showBeforeEarned: z
         .boolean()
         .describe("Whether to show the achievement before it is earned"),
-      repeatable: z.boolean().describe("Whether the achievement can be earned multiple times"),
+      repeatable: z.coerce.boolean().describe("Whether the achievement can be earned multiple times"),
     },
     async ({ detail_id, referenceName, vendorIdentifier, points, showBeforeEarned, repeatable }) => {
       const body = {
@@ -306,12 +306,12 @@ export function registerGameCenterTools(server: McpServer) {
     {
       id: z.string().describe("The Game Center achievement ID"),
       referenceName: z.string().optional().describe("Updated reference name"),
-      points: z.number().optional().describe("Updated point value"),
+      points: z.coerce.number().optional().describe("Updated point value"),
       showBeforeEarned: z
         .boolean()
         .optional()
         .describe("Updated show before earned setting"),
-      repeatable: z.boolean().optional().describe("Updated repeatable setting"),
+      repeatable: z.coerce.boolean().optional().describe("Updated repeatable setting"),
     },
     async ({ id, referenceName, points, showBeforeEarned, repeatable }) => {
       const attributes: Record<string, unknown> = {};
@@ -368,7 +368,7 @@ export function registerGameCenterTools(server: McpServer) {
     "List Game Center leaderboard sets for a Game Center detail.",
     {
       detail_id: z.string().describe("The Game Center detail ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ detail_id, limit }) => {
       const params: Record<string, string> = {};
@@ -451,7 +451,7 @@ export function registerGameCenterTools(server: McpServer) {
     "list_game_center_groups",
     "List Game Center groups, including their Game Center details.",
     {
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ limit }) => {
       const params: Record<string, string> = {

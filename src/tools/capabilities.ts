@@ -8,7 +8,7 @@ export function registerCapabilityTools(server: McpServer) {
     "List capabilities enabled for a bundle ID.",
     {
       bundle_id: z.string().describe("The bundle ID resource ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ bundle_id, limit }) => {
       const params: Record<string, string> = {};

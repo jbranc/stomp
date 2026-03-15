@@ -11,7 +11,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         .enum(["APP", "FRAMEWORK"])
         .optional()
         .describe("Filter by product type (APP or FRAMEWORK)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_productType, limit }) => {
       const params: Record<string, string> = {
@@ -62,7 +62,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "List Xcode Cloud workflows for a CI product.",
     {
       product_id: z.string().describe("The CI product ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ product_id, limit }) => {
       const params: Record<string, string> = {};
@@ -104,7 +104,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "List Xcode Cloud build runs for a workflow, sorted by most recent.",
     {
       workflow_id: z.string().describe("The CI workflow ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ workflow_id, limit }) => {
       const params: Record<string, string> = {
@@ -192,7 +192,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "List build actions for an Xcode Cloud build run.",
     {
       run_id: z.string().describe("The CI build run ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ run_id, limit }) => {
       const params: Record<string, string> = {};
@@ -216,7 +216,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "List artifacts for an Xcode Cloud build action.",
     {
       action_id: z.string().describe("The CI build action ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ action_id, limit }) => {
       const params: Record<string, string> = {};
@@ -240,7 +240,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "List test results for an Xcode Cloud build action.",
     {
       action_id: z.string().describe("The CI build action ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ action_id, limit }) => {
       const params: Record<string, string> = {};
@@ -264,7 +264,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "List issues for an Xcode Cloud build action.",
     {
       action_id: z.string().describe("The CI build action ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ action_id, limit }) => {
       const params: Record<string, string> = {};
@@ -287,7 +287,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "list_ci_mac_os_versions",
     "List available macOS versions for Xcode Cloud, including Xcode versions.",
     {
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ limit }) => {
       const params: Record<string, string> = {
@@ -312,7 +312,7 @@ export function registerXcodeCloudTools(server: McpServer) {
     "list_ci_xcode_versions",
     "List available Xcode versions for Xcode Cloud, including macOS versions.",
     {
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ limit }) => {
       const params: Record<string, string> = {

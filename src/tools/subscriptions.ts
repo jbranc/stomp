@@ -14,7 +14,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .describe(
           "Comma-separated related resources to include (e.g., subscriptions,subscriptionGroupLocalizations)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, include, limit }) => {
       const params: Record<string, string> = {};
@@ -113,7 +113,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .describe(
           "Comma-separated related resources to include (e.g., subscriptionLocalizations,subscriptionAvailability)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ group_id, include, limit }) => {
       const params: Record<string, string> = {};
@@ -295,7 +295,7 @@ export function registerSubscriptionTools(server: McpServer) {
     "List localizations for a subscription.",
     {
       sub_id: z.string().describe("The subscription ID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ sub_id, limit }) => {
       const params: Record<string, string> = {};
@@ -429,7 +429,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .describe(
           "Comma-separated related resources to include (e.g., territory)"
         ),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ sub_id, include, limit }) => {
       const params: Record<string, string> = {};
@@ -458,7 +458,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .string()
         .optional()
         .describe("Filter by territory code (e.g., USA, GBR)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ sub_id, filter_territory, limit }) => {
       const params: Record<string, string> = {};

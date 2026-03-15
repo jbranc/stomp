@@ -18,7 +18,7 @@ export function registerUserTools(server: McpServer) {
         .string()
         .optional()
         .describe("Comma-separated includes (e.g., visibleApps)"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_roles, filter_username, include, limit }) => {
       const params: Record<string, string> = {};
@@ -49,7 +49,7 @@ export function registerUserTools(server: McpServer) {
         .optional()
         .describe("Filter by status"),
       filter_udid: z.string().optional().describe("Filter by UDID"),
-      limit: z.number().min(1).max(200).optional(),
+      limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_name, filter_platform, filter_status, filter_udid, limit }) => {
       const params: Record<string, string> = {};
