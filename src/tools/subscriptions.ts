@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerSubscriptionTools(server: McpServer) {
   server.tool(
@@ -17,9 +18,10 @@ export function registerSubscriptionTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -28,9 +30,7 @@ export function registerSubscriptionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -67,9 +67,7 @@ export function registerSubscriptionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -86,8 +84,9 @@ export function registerSubscriptionTools(server: McpServer) {
         ),
     },
     async ({ id, include }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "include": include,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -96,9 +95,7 @@ export function registerSubscriptionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -116,9 +113,10 @@ export function registerSubscriptionTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ group_id, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -127,9 +125,7 @@ export function registerSubscriptionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -201,9 +197,7 @@ export function registerSubscriptionTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/subscriptions", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -261,9 +255,7 @@ export function registerSubscriptionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -276,17 +268,10 @@ export function registerSubscriptionTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/subscriptions/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted subscription ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted subscription ${id}`,
+      });
     }
   );
 
@@ -298,8 +283,9 @@ export function registerSubscriptionTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ sub_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -308,9 +294,7 @@ export function registerSubscriptionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -351,9 +335,7 @@ export function registerSubscriptionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -387,9 +369,7 @@ export function registerSubscriptionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -404,17 +384,10 @@ export function registerSubscriptionTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/subscriptionLocalizations/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted subscription localization ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted subscription localization ${id}`,
+      });
     }
   );
 
@@ -432,9 +405,10 @@ export function registerSubscriptionTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ sub_id, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -443,9 +417,7 @@ export function registerSubscriptionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -461,9 +433,10 @@ export function registerSubscriptionTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ sub_id, filter_territory, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_territory) params["filter[territory]"] = filter_territory;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[territory]": filter_territory,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -472,9 +445,7 @@ export function registerSubscriptionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -555,9 +526,7 @@ export function registerSubscriptionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -590,9 +559,7 @@ export function registerSubscriptionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

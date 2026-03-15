@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerBundleIdTools(server: McpServer) {
   server.tool(
@@ -31,13 +32,13 @@ export function registerBundleIdTools(server: McpServer) {
       include,
       limit,
     }) => {
-      const params: Record<string, string> = {};
-      if (filter_identifier)
-        params["filter[identifier]"] = filter_identifier;
-      if (filter_name) params["filter[name]"] = filter_name;
-      if (filter_platform) params["filter[platform]"] = filter_platform;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[identifier]": filter_identifier,
+        "filter[name]": filter_name,
+        "filter[platform]": filter_platform,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -46,9 +47,7 @@ export function registerBundleIdTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -78,9 +77,7 @@ export function registerBundleIdTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/bundleIds", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

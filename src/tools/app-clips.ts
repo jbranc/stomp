@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerAppClipTools(server: McpServer) {
   server.tool(
@@ -11,10 +12,10 @@ export function registerAppClipTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, limit }) => {
-      const params: Record<string, string> = {
-        include: "appClipDefaultExperiences",
-      };
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": "appClipDefaultExperiences",
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -23,9 +24,7 @@ export function registerAppClipTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -36,9 +35,9 @@ export function registerAppClipTools(server: McpServer) {
       id: z.string().describe("The App Clip ID"),
     },
     async ({ id }) => {
-      const params: Record<string, string> = {
-        include: "appClipDefaultExperiences",
-      };
+      const params = buildParams({
+        "include": "appClipDefaultExperiences",
+      });
 
       const response = await apiRequest(
         "GET",
@@ -47,9 +46,7 @@ export function registerAppClipTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -61,10 +58,10 @@ export function registerAppClipTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ clip_id, limit }) => {
-      const params: Record<string, string> = {
-        include: "appClipDefaultExperienceLocalizations",
-      };
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": "appClipDefaultExperienceLocalizations",
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -73,9 +70,7 @@ export function registerAppClipTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -123,9 +118,7 @@ export function registerAppClipTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -154,9 +147,7 @@ export function registerAppClipTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -169,17 +160,10 @@ export function registerAppClipTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/appClipDefaultExperiences/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted App Clip default experience ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted App Clip default experience ${id}`,
+      });
     }
   );
 }

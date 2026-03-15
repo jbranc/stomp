@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest, apiRequestAllPages } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerAppTools(server: McpServer) {
   server.tool(
@@ -26,17 +27,16 @@ export function registerAppTools(server: McpServer) {
         ),
     },
     async ({ limit, filter_bundleId, filter_name, include }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
-      if (filter_bundleId) params["filter[bundleId]"] = filter_bundleId;
-      if (filter_name) params["filter[name]"] = filter_name;
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "limit": limit,
+        "filter[bundleId]": filter_bundleId,
+        "filter[name]": filter_name,
+        "include": include,
+      });
 
       const response = await apiRequest("GET", "/v1/apps", undefined, params);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -59,9 +59,10 @@ export function registerAppTools(server: McpServer) {
         ),
     },
     async ({ app_id, include, fields_apps }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
-      if (fields_apps) params["fields[apps]"] = fields_apps;
+      const params = buildParams({
+        "include": include,
+        "fields[apps]": fields_apps,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -70,9 +71,7 @@ export function registerAppTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -115,9 +114,7 @@ export function registerAppTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/apps", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

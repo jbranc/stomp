@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { jsonResponse, errorResponse } from "../helpers.js";
 
 export function registerGenericTools(server: McpServer) {
   server.tool(
@@ -36,17 +37,12 @@ Auth is handled automatically. See https://developer.apple.com/documentation/app
         try {
           parsedBody = JSON.parse(body);
         } catch {
-          return {
-            content: [{ type: "text" as const, text: `Error: Invalid JSON in request body: ${body}` }],
-            isError: true,
-          };
+          return errorResponse(`Error: Invalid JSON in request body: ${body}`);
         }
       }
       const response = await apiRequest(method, path, parsedBody, params);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

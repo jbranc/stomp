@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerScreenshotTools(server: McpServer) {
   // --- Screenshot Sets ---
@@ -15,8 +16,9 @@ export function registerScreenshotTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ localization_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -25,9 +27,7 @@ export function registerScreenshotTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -68,9 +68,7 @@ export function registerScreenshotTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -83,17 +81,10 @@ export function registerScreenshotTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/appScreenshotSets/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted screenshot set ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted screenshot set ${id}`,
+      });
     }
   );
 
@@ -107,8 +98,9 @@ export function registerScreenshotTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ set_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -117,9 +109,7 @@ export function registerScreenshotTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -156,9 +146,7 @@ export function registerScreenshotTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -171,17 +159,10 @@ export function registerScreenshotTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/appScreenshots/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted screenshot ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted screenshot ${id}`,
+      });
     }
   );
 
@@ -197,8 +178,9 @@ export function registerScreenshotTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ localization_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -207,9 +189,7 @@ export function registerScreenshotTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -250,9 +230,7 @@ export function registerScreenshotTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -265,17 +243,10 @@ export function registerScreenshotTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/appPreviewSets/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted preview set ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted preview set ${id}`,
+      });
     }
   );
 
@@ -289,8 +260,9 @@ export function registerScreenshotTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ set_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -299,9 +271,7 @@ export function registerScreenshotTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -348,9 +318,7 @@ export function registerScreenshotTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -363,17 +331,10 @@ export function registerScreenshotTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/appPreviews/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted preview ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted preview ${id}`,
+      });
     }
   );
 }

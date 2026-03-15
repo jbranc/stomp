@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerXcodeCloudTools(server: McpServer) {
   server.tool(
@@ -14,11 +15,11 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_productType, limit }) => {
-      const params: Record<string, string> = {
-        include: "app,bundleId,primaryRepositories",
-      };
-      if (filter_productType) params["filter[productType]"] = filter_productType;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": "app,bundleId,primaryRepositories",
+        "filter[productType]": filter_productType,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -27,9 +28,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -40,9 +39,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       id: z.string().describe("The CI product ID"),
     },
     async ({ id }) => {
-      const params: Record<string, string> = {
-        include: "app,bundleId,primaryRepositories",
-      };
+      const params = buildParams({
+        "include": "app,bundleId,primaryRepositories",
+      });
 
       const response = await apiRequest(
         "GET",
@@ -51,9 +50,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -65,8 +62,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ product_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -75,9 +73,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -93,9 +89,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         `/v1/ciWorkflows/${id}`
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -107,10 +101,10 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ workflow_id, limit }) => {
-      const params: Record<string, string> = {
-        sort: "-startedDate",
-      };
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "sort": "-startedDate",
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -119,9 +113,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -132,9 +124,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       id: z.string().describe("The CI build run ID"),
     },
     async ({ id }) => {
-      const params: Record<string, string> = {
-        include: "builds,workflow,sourceBranchOrTag,destinationBranch",
-      };
+      const params = buildParams({
+        "include": "builds,workflow,sourceBranchOrTag,destinationBranch",
+      });
 
       const response = await apiRequest(
         "GET",
@@ -143,9 +135,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -181,9 +171,7 @@ export function registerXcodeCloudTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/ciBuildRuns", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -195,8 +183,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ run_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -205,9 +194,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -219,8 +206,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ action_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -229,9 +217,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -243,8 +229,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ action_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -253,9 +240,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -267,8 +252,9 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ action_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -277,9 +263,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -290,10 +274,10 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ limit }) => {
-      const params: Record<string, string> = {
-        include: "xcodeVersions",
-      };
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": "xcodeVersions",
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -302,9 +286,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -315,10 +297,10 @@ export function registerXcodeCloudTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ limit }) => {
-      const params: Record<string, string> = {
-        include: "macOsVersions",
-      };
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": "macOsVersions",
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -327,9 +309,7 @@ export function registerXcodeCloudTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

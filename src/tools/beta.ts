@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerBetaTools(server: McpServer) {
   server.tool(
@@ -16,12 +17,12 @@ export function registerBetaTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, filter_name, include, limit }) => {
-      const params: Record<string, string> = {
+      const params = buildParams({
         "filter[app]": app_id,
-      };
-      if (filter_name) params["filter[name]"] = filter_name;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+        "filter[name]": filter_name,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -30,9 +31,7 @@ export function registerBetaTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -89,9 +88,7 @@ export function registerBetaTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/betaGroups", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -112,12 +109,13 @@ export function registerBetaTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_email, filter_betaGroups, filter_apps, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_email) params["filter[email]"] = filter_email;
-      if (filter_betaGroups) params["filter[betaGroups]"] = filter_betaGroups;
-      if (filter_apps) params["filter[apps]"] = filter_apps;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[email]": filter_email,
+        "filter[betaGroups]": filter_betaGroups,
+        "filter[apps]": filter_apps,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -126,9 +124,7 @@ export function registerBetaTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -169,9 +165,7 @@ export function registerBetaTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/betaTesters", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -198,17 +192,10 @@ export function registerBetaTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Added ${tester_ids.length} tester(s) to beta group ${beta_group_id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Added ${tester_ids.length} tester(s) to beta group ${beta_group_id}`,
+      });
     }
   );
 
@@ -235,17 +222,10 @@ export function registerBetaTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Removed ${tester_ids.length} tester(s) from beta group ${beta_group_id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Removed ${tester_ids.length} tester(s) from beta group ${beta_group_id}`,
+      });
     }
   );
 
@@ -258,17 +238,10 @@ export function registerBetaTools(server: McpServer) {
     async ({ beta_group_id }) => {
       await apiRequest("DELETE", `/v1/betaGroups/${beta_group_id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted beta group ${beta_group_id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted beta group ${beta_group_id}`,
+      });
     }
   );
 
@@ -281,17 +254,10 @@ export function registerBetaTools(server: McpServer) {
     async ({ tester_id }) => {
       await apiRequest("DELETE", `/v1/betaTesters/${tester_id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted beta tester ${tester_id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted beta tester ${tester_id}`,
+      });
     }
   );
 }

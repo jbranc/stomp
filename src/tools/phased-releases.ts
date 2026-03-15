@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { jsonResponse } from "../helpers.js";
 
 export function registerPhasedReleaseTools(server: McpServer) {
   server.tool(
@@ -15,9 +16,7 @@ export function registerPhasedReleaseTools(server: McpServer) {
         `/v1/appStoreVersions/${version_id}/appStoreVersionPhasedRelease`
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -54,9 +53,7 @@ export function registerPhasedReleaseTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -86,9 +83,7 @@ export function registerPhasedReleaseTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -101,17 +96,10 @@ export function registerPhasedReleaseTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/appStoreVersionPhasedReleases/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted phased release ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted phased release ${id}`,
+      });
     }
   );
 
@@ -142,9 +130,7 @@ export function registerPhasedReleaseTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

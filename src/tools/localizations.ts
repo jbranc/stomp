@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerLocalizationTools(server: McpServer) {
   server.tool(
@@ -11,8 +12,9 @@ export function registerLocalizationTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ version_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -21,9 +23,7 @@ export function registerLocalizationTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -39,9 +39,7 @@ export function registerLocalizationTools(server: McpServer) {
         `/v1/appStoreVersionLocalizations/${localization_id}`
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -107,9 +105,7 @@ export function registerLocalizationTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -160,9 +156,7 @@ export function registerLocalizationTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

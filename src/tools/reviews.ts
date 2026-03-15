@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerReviewTools(server: McpServer) {
   server.tool(
@@ -29,10 +30,11 @@ export function registerReviewTools(server: McpServer) {
         .describe("Number of reviews to return (max 200)"),
     },
     async ({ app_id, sort, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (sort) params["sort"] = sort;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "sort": sort,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -41,9 +43,7 @@ export function registerReviewTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -61,8 +61,9 @@ export function registerReviewTools(server: McpServer) {
         ),
     },
     async ({ id, include }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "include": include,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -71,9 +72,7 @@ export function registerReviewTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -108,9 +107,7 @@ export function registerReviewTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -138,9 +135,7 @@ export function registerReviewTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -153,17 +148,10 @@ export function registerReviewTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/customerReviewResponses/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted customer review response ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted customer review response ${id}`,
+      });
     }
   );
 }

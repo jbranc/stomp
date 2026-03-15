@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerGameCenterTools(server: McpServer) {
   server.tool(
@@ -10,10 +11,10 @@ export function registerGameCenterTools(server: McpServer) {
       app_id: z.string().describe("The App Store Connect app ID"),
     },
     async ({ app_id }) => {
-      const params: Record<string, string> = {
-        include:
+      const params = buildParams({
+        "include":
           "gameCenterAppVersions,gameCenterGroup,gameCenterLeaderboards,gameCenterLeaderboardSets,gameCenterAchievements",
-      };
+      });
 
       const response = await apiRequest(
         "GET",
@@ -22,9 +23,7 @@ export function registerGameCenterTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -36,8 +35,9 @@ export function registerGameCenterTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ detail_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -46,9 +46,7 @@ export function registerGameCenterTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -131,9 +129,7 @@ export function registerGameCenterTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/gameCenterLeaderboards", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -202,9 +198,7 @@ export function registerGameCenterTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -217,17 +211,10 @@ export function registerGameCenterTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/gameCenterLeaderboards/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted Game Center leaderboard ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted Game Center leaderboard ${id}`,
+      });
     }
   );
 
@@ -239,8 +226,9 @@ export function registerGameCenterTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ detail_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -249,9 +237,7 @@ export function registerGameCenterTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -294,9 +280,7 @@ export function registerGameCenterTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/gameCenterAchievements", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -334,9 +318,7 @@ export function registerGameCenterTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -349,17 +331,10 @@ export function registerGameCenterTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/gameCenterAchievements/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted Game Center achievement ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted Game Center achievement ${id}`,
+      });
     }
   );
 
@@ -371,8 +346,9 @@ export function registerGameCenterTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ detail_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -381,9 +357,7 @@ export function registerGameCenterTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -418,9 +392,7 @@ export function registerGameCenterTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/gameCenterLeaderboardSets", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -433,17 +405,10 @@ export function registerGameCenterTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/gameCenterLeaderboardSets/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted Game Center leaderboard set ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted Game Center leaderboard set ${id}`,
+      });
     }
   );
 
@@ -454,10 +419,10 @@ export function registerGameCenterTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ limit }) => {
-      const params: Record<string, string> = {
-        include: "gameCenterDetails",
-      };
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": "gameCenterDetails",
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -466,9 +431,7 @@ export function registerGameCenterTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -490,9 +453,7 @@ export function registerGameCenterTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/gameCenterGroups", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerAppInfoTools(server: McpServer) {
   server.tool(
@@ -17,9 +18,10 @@ export function registerAppInfoTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -28,9 +30,7 @@ export function registerAppInfoTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -45,8 +45,9 @@ export function registerAppInfoTools(server: McpServer) {
         .describe("Comma-separated includes (e.g., appInfoLocalizations)"),
     },
     async ({ id, include }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "include": include,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -55,9 +56,7 @@ export function registerAppInfoTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -159,9 +158,7 @@ export function registerAppInfoTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -173,8 +170,9 @@ export function registerAppInfoTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_info_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -183,9 +181,7 @@ export function registerAppInfoTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -222,9 +218,7 @@ export function registerAppInfoTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -243,10 +237,11 @@ export function registerAppInfoTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_platforms, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_platforms) params["filter[platforms]"] = filter_platforms;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[platforms]": filter_platforms,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -255,9 +250,7 @@ export function registerAppInfoTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -273,9 +266,7 @@ export function registerAppInfoTools(server: McpServer) {
         `/v1/appInfos/${app_info_id}/ageRatingDeclaration`
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -426,9 +417,7 @@ export function registerAppInfoTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

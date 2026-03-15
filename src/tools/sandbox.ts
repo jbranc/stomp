@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { jsonResponse } from "../helpers.js";
 
 export function registerSandboxTools(server: McpServer) {
   server.tool(
@@ -10,9 +11,7 @@ export function registerSandboxTools(server: McpServer) {
     async () => {
       const response = await apiRequest("GET", "/v2/sandboxTesters");
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -56,9 +55,7 @@ export function registerSandboxTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -91,9 +88,7 @@ export function registerSandboxTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

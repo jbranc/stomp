@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerBuildTools(server: McpServer) {
   server.tool(
@@ -43,17 +44,15 @@ export function registerBuildTools(server: McpServer) {
       sort,
       limit,
     }) => {
-      const params: Record<string, string> = {
+      const params = buildParams({
         "filter[app]": app_id,
-      };
-      if (filter_version) params["filter[version]"] = filter_version;
-      if (filter_processingState)
-        params["filter[processingState]"] = filter_processingState;
-      if (filter_expired !== undefined)
-        params["filter[expired]"] = String(filter_expired);
-      if (include) params["include"] = include;
-      if (sort) params["sort"] = sort;
-      if (limit) params["limit"] = String(limit);
+        "filter[version]": filter_version,
+        "filter[processingState]": filter_processingState,
+        "filter[expired]": filter_expired,
+        "include": include,
+        "sort": sort,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -62,9 +61,7 @@ export function registerBuildTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -89,17 +86,10 @@ export function registerBuildTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Added ${build_ids.length} build(s) to beta group ${beta_group_id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Added ${build_ids.length} build(s) to beta group ${beta_group_id}`,
+      });
     }
   );
 }

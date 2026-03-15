@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerPricingTools(server: McpServer) {
   server.tool(
@@ -27,11 +28,11 @@ export function registerPricingTools(server: McpServer) {
         .describe("Number of price points to return (max 200)"),
     },
     async ({ app_id, filter_territory, include, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_territory)
-        params["filter[territory]"] = filter_territory;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[territory]": filter_territory,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -40,9 +41,7 @@ export function registerPricingTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -60,8 +59,9 @@ export function registerPricingTools(server: McpServer) {
         ),
     },
     async ({ app_id, include }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "include": include,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -70,9 +70,7 @@ export function registerPricingTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -88,8 +86,9 @@ export function registerPricingTools(server: McpServer) {
         .describe("Number of territories to return (max 200)"),
     },
     async ({ limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -98,9 +97,7 @@ export function registerPricingTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

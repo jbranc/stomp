@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerVersionTools(server: McpServer) {
   server.tool(
@@ -38,14 +39,13 @@ export function registerVersionTools(server: McpServer) {
       include,
       limit,
     }) => {
-      const params: Record<string, string> = {};
-      if (filter_versionString)
-        params["filter[versionString]"] = filter_versionString;
-      if (filter_platform) params["filter[platform]"] = filter_platform;
-      if (filter_appStoreState)
-        params["filter[appStoreState]"] = filter_appStoreState;
-      if (include) params["include"] = include;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[versionString]": filter_versionString,
+        "filter[platform]": filter_platform,
+        "filter[appStoreState]": filter_appStoreState,
+        "include": include,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -54,9 +54,7 @@ export function registerVersionTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -114,9 +112,7 @@ export function registerVersionTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/appStoreVersions", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -164,9 +160,7 @@ export function registerVersionTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }

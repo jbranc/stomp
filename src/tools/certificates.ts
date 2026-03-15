@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerCertificateTools(server: McpServer) {
   server.tool(
@@ -8,21 +9,20 @@ export function registerCertificateTools(server: McpServer) {
     "List signing certificates. Filter by type, display name, or serial number.",
     {
       filter_certificateType: z
-        .string()
+        .enum(["IOS_DEVELOPMENT", "IOS_DISTRIBUTION", "MAC_APP_DEVELOPMENT", "MAC_APP_DISTRIBUTION", "MAC_INSTALLER_DISTRIBUTION", "DEVELOPER_ID_KEXT", "DEVELOPER_ID_APPLICATION", "DEVELOPMENT", "DISTRIBUTION"])
         .optional()
-        .describe(
-          "Filter by certificate type (e.g., IOS_DEVELOPMENT, IOS_DISTRIBUTION, MAC_APP_DEVELOPMENT, MAC_APP_DISTRIBUTION, DEVELOPER_ID_APPLICATION)"
-        ),
+        .describe("Filter by certificate type"),
       filter_displayName: z.string().optional().describe("Filter by display name"),
       filter_serialNumber: z.string().optional().describe("Filter by serial number"),
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_certificateType, filter_displayName, filter_serialNumber, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_certificateType) params["filter[certificateType]"] = filter_certificateType;
-      if (filter_displayName) params["filter[displayName]"] = filter_displayName;
-      if (filter_serialNumber) params["filter[serialNumber]"] = filter_serialNumber;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[certificateType]": filter_certificateType,
+        "filter[displayName]": filter_displayName,
+        "filter[serialNumber]": filter_serialNumber,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -31,9 +31,7 @@ export function registerCertificateTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -49,9 +47,7 @@ export function registerCertificateTools(server: McpServer) {
         `/v1/certificates/${id}`
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -81,9 +77,7 @@ export function registerCertificateTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/certificates", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -96,17 +90,10 @@ export function registerCertificateTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/certificates/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Revoked certificate ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Revoked certificate ${id}`,
+      });
     }
   );
 
@@ -128,11 +115,12 @@ export function registerCertificateTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_name, filter_profileType, filter_profileState, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_name) params["filter[name]"] = filter_name;
-      if (filter_profileType) params["filter[profileType]"] = filter_profileType;
-      if (filter_profileState) params["filter[profileState]"] = filter_profileState;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[name]": filter_name,
+        "filter[profileType]": filter_profileType,
+        "filter[profileState]": filter_profileState,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -141,9 +129,7 @@ export function registerCertificateTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -158,8 +144,9 @@ export function registerCertificateTools(server: McpServer) {
         .describe("Comma-separated includes (e.g., bundleId,certificates,devices)"),
     },
     async ({ id, include }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "include": include,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -168,9 +155,7 @@ export function registerCertificateTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -230,9 +215,7 @@ export function registerCertificateTools(server: McpServer) {
 
       const response = await apiRequest("POST", "/v1/profiles", body);
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -245,17 +228,10 @@ export function registerCertificateTools(server: McpServer) {
     async ({ id }) => {
       await apiRequest("DELETE", `/v1/profiles/${id}`);
 
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({
-              success: true,
-              message: `Deleted profile ${id}`,
-            }),
-          },
-        ],
-      };
+      return jsonResponse({
+        success: true,
+        message: `Deleted profile ${id}`,
+      });
     }
   );
 }

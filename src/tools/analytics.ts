@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
+import { buildParams, jsonResponse } from "../helpers.js";
 
 export function registerAnalyticsTools(server: McpServer) {
   server.tool(
@@ -36,9 +37,7 @@ export function registerAnalyticsTools(server: McpServer) {
         body
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -54,10 +53,10 @@ export function registerAnalyticsTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ app_id, filter_accessType, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_accessType)
-        params["filter[accessType]"] = filter_accessType;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[accessType]": filter_accessType,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -66,9 +65,7 @@ export function registerAnalyticsTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -86,8 +83,9 @@ export function registerAnalyticsTools(server: McpServer) {
         ),
     },
     async ({ id, include }) => {
-      const params: Record<string, string> = {};
-      if (include) params["include"] = include;
+      const params = buildParams({
+        "include": include,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -96,9 +94,7 @@ export function registerAnalyticsTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -116,9 +112,10 @@ export function registerAnalyticsTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ request_id, filter_category, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_category) params["filter[category]"] = filter_category;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[category]": filter_category,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -127,9 +124,7 @@ export function registerAnalyticsTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -149,12 +144,11 @@ export function registerAnalyticsTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ report_id, filter_processingDate, filter_granularity, limit }) => {
-      const params: Record<string, string> = {};
-      if (filter_processingDate)
-        params["filter[processingDate]"] = filter_processingDate;
-      if (filter_granularity)
-        params["filter[granularity]"] = filter_granularity;
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "filter[processingDate]": filter_processingDate,
+        "filter[granularity]": filter_granularity,
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -163,9 +157,7 @@ export function registerAnalyticsTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 
@@ -177,8 +169,9 @@ export function registerAnalyticsTools(server: McpServer) {
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ instance_id, limit }) => {
-      const params: Record<string, string> = {};
-      if (limit) params["limit"] = String(limit);
+      const params = buildParams({
+        "limit": limit,
+      });
 
       const response = await apiRequest(
         "GET",
@@ -187,9 +180,7 @@ export function registerAnalyticsTools(server: McpServer) {
         params
       );
 
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
-      };
+      return jsonResponse(response);
     }
   );
 }
